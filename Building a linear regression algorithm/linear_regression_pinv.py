@@ -33,7 +33,12 @@ class LinearRegressionPINV(LinearRegression):
         """
         Your code goes here
         """
-        new_thetas = np.array([])  # replace this line with actual code!!
+
+        X = train_data
+        y = train_target
+        new_thetas = np.linalg.lstsq(X, y)
+        # self.thetas = y.T * X * np.linalg.inv(X.T * X)
+        self.thetas = np.array([new_thetas])  # replace this line with actual code!!
         # Don't forget to use regularization_lambda!!
 
         # Assign the new thetas

@@ -22,6 +22,6 @@ class MinMaxScale(Algorithm):
 
 
 if __name__ == "__main__":
-    x = MinMaxScale("MinMaxScale")
     test_min_max_scaler_array = np.arange(20).reshape(4, 5)
-    print(x.run(test_min_max_scaler_array))
+    x = MinMaxScale("MinMaxScale").run(test_min_max_scaler_array)
+    print(x)

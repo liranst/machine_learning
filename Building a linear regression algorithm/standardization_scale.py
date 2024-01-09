@@ -18,12 +18,12 @@ class StandardizationScale(Algorithm):
         :param data:
         :return:
         """
-        data = (data - np.average(data))/  np.std(data)
+        data = (data - np.average(data))/np.std(data)
         return data
 
 
 
 if __name__ == "__main__":
     test_std_scaler_array = np.arange(24).reshape(6, 4)
-    x = StandardizationScale("StandardizationScale")
-    print(Algorithm.run(test_std_scaler_array))
+    x = StandardizationScale("StandardizationScale").run(test_std_scaler_array)
+    print(x)
