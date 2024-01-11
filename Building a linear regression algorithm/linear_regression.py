@@ -8,13 +8,13 @@ class LinearRegression(abc.ABC):
     Linear Regression Model
     """
 
-    def __init__(self, regularization_lambda: float):
+    def __init__(self, regularization_lambda: float, learning_rate: float):
         """
         :param regularization_lambda: The lambda parameter to use for the regularization
         """
         self._regularization_lambda = regularization_lambda
-
         self.thetas: Optional[np.ndarray] = None
+        self._learning_rate = learning_rate
 
     @abc.abstractmethod
     def fit(self, train_data: np.ndarray, train_target: np.ndarray) -> None:

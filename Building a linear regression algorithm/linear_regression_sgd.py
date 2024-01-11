@@ -9,16 +9,14 @@ class LinearRegressionSGD(LinearRegression):
     Linear Regression Model with using (Stochastic Gradient Descent)
     """
 
-    def __init__(self, regularization_lambda: float = 1, sgd_num_of_iterations: int = 100):
+    def __init__(self, regularization_lambda: float = 1, sgd_num_of_iterations: int = 1000, learning_rate: float = 0.001):
         """
-
         :param regularization_lambda: The lambda parameter to use for the regularization
         :param sgd_num_of_iterations: Number of iterations for the SGD algorithm
         """
-        super().__init__(regularization_lambda=regularization_lambda)
-
         self._sgd_num_of_iterations = sgd_num_of_iterations
-        self.regularization_lambda = regularization_lambda
+        self._regularization_lambda = regularization_lambda
+        super().__init__(regularization_lambda=regularization_lambda, learning_rate=learning_rate)
 
     def fit(self, train_data: np.ndarray, train_target: np.ndarray) -> None:
         """
@@ -29,43 +27,44 @@ class LinearRegressionSGD(LinearRegression):
 
         """
         # Add bias column (1's column) to the data
-        X = LinearRegression._add_bias_column(arr=train_data)
-        y = train_target
-        alpha = 0.01
+        train_data = LinearRegression._add_bias_column(arr=train_data)
 
         # get dimensions
-        m = train_data.shape[0]  # number of samples
-        n = train_data.shape[1]  # number of features (including bias)
+        n = train_data.shape[0]  # number of samples
+        m = train_data.shape[1]  # number of features (including bias)
 
         # randomize initial thetas
-        W = np.random.random(size=n)
-        cost_history_list = []
-
+        self.thetas = np.random.random(size=(m, 1))
         # Perform iterations of SGD
-        for iteration in range(self._sgd_num_of_iterations):
-            # calculate new thetas using SGD
-            y_estimated = X @ W
-            error = y_estimated - y
+        for _ in range(self._sgd_num_of_iterations):
+            def foo(one=True):
+                if one:
+                    # calculate new thetas using SGD -
+                    # θ := θ - a/n [(Xθ - y).T @ X + λθ]
+                    mul = self._learning_rate / n  # a/n
+                    d_normal = self._regularization_lambda * self.thetas.T  # λθ
+                    prediction = train_data @ self.thetas  # (Xθ - y)
+                    D = ((prediction - train_target).T @ train_data + d_normal)  # (Xθ - y).T @ X
+                    self.thetas -= D.T * mul  # θ := θ - a/n [(Xθ - y)X.T + λ @ θ.T]
+                    return self.thetas
+                else:
+                    # θ = [ X.T @ X + λ[1]] ^ -1 @ X.T @ y
+                    I = np.identity(m)
+                    I[0, 0] = 0
+                    new = train_data.T @ train_data + self._regularization_lambda * I
+                    self.thetas = np.linalg.inv(new) @ train_data.T @ train_target
+                    print("1")
+                    return self.thetas
 
-            # regularization term
-            ridge_reg_term = (self.regularization_lambda / 2 * m) * np.sum(np.square(W))
+            a = True
+            self.thetas = foo(one=True) if a else foo(one=False)
+            A = 1/n * (train_target - train_data @ self.thetas)
+            loss = (A.T @ A)
+            print(loss[0,0])
 
-            # calculate the cost (MSE) + regularization term
-            cost = (1 / 2 * m) * np.sum(error ** 2) + ridge_reg_term
 
-            # Update our gradient by the dot product between
-            # the transpose of 'X' and our error + lambda value * W
-            # divided by the total number of samples
-            gradient = (1 / m) * (X.T.dot(error) + (self.regularization_lambda * W))
 
-            # Now we have to update our weights
-            W = W - alpha * gradient
 
-            # Let's print out the cost to see how these values
-            # changes after every iteration
-            print(f"cost:{cost} \t iteration: {iteration}")
 
-            # keep track the cost as it changes in each iteration
-            cost_history_list.append(cost)
-
-        return W
+if __name__ == "__main__":
+    pass

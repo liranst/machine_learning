@@ -28,7 +28,7 @@ class DataLoader:
         :return: Returns a numpy array with the train target.
         """
         get_train_target = np.load(self.train_file_path)
-        return get_train_target[:,-1:]
+        return get_train_target[:, -1:]
 
     def get_test_data(self) -> np.ndarray:
         """

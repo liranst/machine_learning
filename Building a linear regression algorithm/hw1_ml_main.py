@@ -51,14 +51,13 @@ arr2 = np.array([7, 3, 4, 5, 1])
 mse = LinearRegression.calculate_mse(predicted=arr1, target=arr2)
 
 print(f"The mse in Part 2 is {mse}")
-
 ###################################
 # Part 3 - Linear Regression - SGD
 ###################################
 sgd_algo = LinearRegressionSGD()
 sgd_algo.fit(train_data=train_data, train_target=train_target)
 
-print(f"The thetas in Part 3 are {sgd_algo.thetas}")
+print(f"The thetas in Part 3 are {(np.sum(sgd_algo.thetas))}")
 
 ###################################
 # Part 4 - Linear Regression - PINV
@@ -66,7 +65,7 @@ print(f"The thetas in Part 3 are {sgd_algo.thetas}")
 pinv_algo = LinearRegressionPINV()
 pinv_algo.fit(train_data=train_data, train_target=train_target)
 
-print(f"The thetas in Part 4 are {pinv_algo.thetas}")
+print(f"The thetas in Part 4 are: \n {pinv_algo.thetas}")
 
 ###################################
 # Part 5 - Linear Regression - Predict
