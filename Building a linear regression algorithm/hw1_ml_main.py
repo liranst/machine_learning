@@ -24,10 +24,11 @@ test_data = data_loader.get_test_data()
 test_target = data_loader.get_test_target()
 
 # Standardization activation
-train_data = StandardizationScale("Standard_train_data").run(train_data)
-train_target = StandardizationScale("Standard_train_target").run(train_target)
-test_data = StandardizationScale("Standard_test_data").run(test_data)
-test_target = StandardizationScale("Standard_test_data").run(test_target)
+StrScale = StandardizationScale("Standard")
+train_data = StrScale.run(train_data)
+train_target = StrScale.run(train_target)
+test_data = StrScale.run(test_data)
+test_target = StrScale.run(test_target)
 
 # Added feature
 def added_feature(data, colum=-1):
@@ -55,14 +56,12 @@ print(f"The mse in Part 2 is {mse}\n"
       "# Part 3 - Linear Regression - SGD\n"
       "###################################")
 
-
 sgd_algo = LinearRegressionSGD()
 sgd_algo.fit(train_data=train_data, train_target=train_target)
 print(f"The thetas in Part 3 are {sgd_algo.thetas}\n"
       "###################################\n"
       "# Part 4 - Linear Regression - PINV\n"
       "###################################")
-
 
 pinv_algo = LinearRegressionPINV()
 pinv_algo.fit(train_data=train_data, train_target=train_target)
