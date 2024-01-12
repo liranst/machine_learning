@@ -5,12 +5,12 @@ class StandardizationScale(Algorithm):
     """
 
     """
-    def __init__(self, algo_name: str):
+    def __init__(self, algo_name: str, regularization_lambda: float, learning_rate: float):
         """
 
         :param algo_name:
         """
-        super().__init__(algo_name)
+        super().__init__(regularization_lambda, learning_rate)
 
     def run(self, data: np.ndarray) -> np.ndarray:
         """

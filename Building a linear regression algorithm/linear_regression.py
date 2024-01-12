@@ -26,20 +26,19 @@ class LinearRegression(abc.ABC):
         """
         pass
 
-    def predict(self, test_data: np.ndarray) -> np.ndarray:
+    def predict(self, test_data: np.ndarray,) -> np.ndarray:
         """
         Use the thetas which were calculated in the fit method to predict the target for the input data.
 
         :param test_data: The data to predict the target for.
         :return: The prediction results as a np-array
         """
-
         # Predict the target using self.thetas and the input test_data
-        """
-        Your code goes here
-        """
+
         # The line below is WRONG - it is just a placeholder - replace it with actual code
-        predicted_target = test_data + self.thetas  # replace this line with actual code!!
+        # Add bias column (1's column) to the data
+        test_data = LinearRegression._add_bias_column(arr=test_data)
+        predicted_target = test_data @ self.thetas    # replace this line with actual code!!
 
         return predicted_target
 
@@ -69,4 +68,3 @@ class LinearRegression(abc.ABC):
         new_arr = np.column_stack((ones_col, arr))
 
         return new_arr
-
