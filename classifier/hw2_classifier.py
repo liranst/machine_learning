@@ -1,28 +1,33 @@
 from typing import Tuple
-from sklearn import tree
+from sklearn.tree import DecisionTreeClassifier
+
 from sklearn.svm import SVC
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 class Hw2Classifier:
 
-    def __init__(self, models_weights: Tuple[float, float, float] = (0.34, 0.33, 0.33)):
+    def __init__(self, models_weights: Tuple[float, float, float] =  (0.5, 0.2, 0.75)):
         self._models_weights = np.asarray(models_weights)
 
-        self._dt_model = tree.DecisionTreeClassifier(max_depth=3)
-        self._lor_model = LogisticRegression(solver='lbfgs')
-        self._svm_model = SVC(kernel='linear')
+        self._dt_model = DecisionTreeClassifier(
+            criterion="entropy",
+            splitter="best",
+            max_depth=5,
+            min_samples_split=2,
+        )
+
+        self._lor_model = LogisticRegression(C=100, class_weight="balanced")
+        self._svm_model = SVC(C=100, class_weight="balanced", tol=0.01)
 
     def fit(self, X, y):
-        # TODO implement the fit method (you should call the fit method of each model)
         self._dt_model.fit(X, y)
         self._lor_model.fit(X, y)
         self._svm_model.fit(X, y)
         return self
 
     def predict(self, X):
-        # TODO implement the predict method
         predict_dt3 = self._dt_model.predict(X) * self._models_weights[0]
         predict_LR = self._lor_model.predict(X) * self._models_weights[1]
         predict_svm = self._svm_model.predict(X) * self._models_weights[2]
@@ -33,14 +38,13 @@ class Hw2Classifier:
     def score(self, X, y):
         y_predicted = self.predict(X)
         f1_score = self.f1_score(y_predicted=y_predicted, y_true=y)
-
         return f1_score
 
     def fit_predict(self, X, y):
+
         return self.fit(X, y).predict(y)
 
     def confusion_matrix(self, y_predicted, y_true):
-        # TODO implement the confusion_matrix method
         """
         This method should return the confusion matrix as a numpy array,
         in the following format:
@@ -55,13 +59,11 @@ class Hw2Classifier:
         matrix[0][1] = np.logical_and(y_predicted == True, y_true == False).sum()
         matrix[1][0] = np.logical_and(y_predicted == False, y_true == True).sum()
         matrix[1][1] = np.logical_and(y_predicted == False, y_true == False).sum()
-
         return matrix
 
     def precision(self, y_predicted, y_true):
         matrix = self.confusion_matrix(y_predicted, y_true)
         the_precision = matrix[0][0] / (matrix[0][0] + matrix[0][1])
-
         return the_precision
 
     def recall(self, y_predicted, y_true):
@@ -79,3 +81,6 @@ class Hw2Classifier:
                        / (self.precision(y_predicted, y_true) + self.recall(y_predicted, y_true))
         # the_f1_score = sklearn.metrics.f1_score(y_predicted, y_true)
         return the_f1_score
+
+    def shwo_visualization(self):
+        pass
