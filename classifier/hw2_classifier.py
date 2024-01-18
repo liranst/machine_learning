@@ -1,16 +1,13 @@
 from typing import Tuple
 from sklearn.tree import DecisionTreeClassifier
-
 from sklearn.svm import SVC
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-import matplotlib.pyplot as plt
-import seaborn as sns
+
 class Hw2Classifier:
 
     def __init__(self, models_weights: Tuple[float, float, float] = (0.001, 0.09, 0.9)):
         self._models_weights = np.asarray(models_weights)
-
         self._dt_model = DecisionTreeClassifier(
             criterion="gini",
             splitter="best",
@@ -18,7 +15,6 @@ class Hw2Classifier:
             min_samples_split=2,
             random_state=50
         )
-
         self._lor_model = LogisticRegression(penalty="l2", C=100, class_weight="balanced", max_iter=100)
         self._svm_model = SVC(C=100, class_weight="balanced", tol=0.3)
 
@@ -42,7 +38,6 @@ class Hw2Classifier:
         return f1_score
 
     def fit_predict(self, X, y):
-
         return self.fit(X, y).predict(y)
 
     def confusion_matrix(self, y_predicted, y_true):
@@ -55,7 +50,6 @@ class Hw2Classifier:
             confusion_matrix[1][1] = True Negative
         """
         matrix = np.zeros((2, 2))
-
         matrix[0][0] = np.logical_and(y_predicted == True, y_true == True).sum()
         matrix[0][1] = np.logical_and(y_predicted == True, y_true == False).sum()
         matrix[1][0] = np.logical_and(y_predicted == False, y_true == True).sum()
@@ -82,6 +76,3 @@ class Hw2Classifier:
                        / (self.precision(y_predicted, y_true) + self.recall(y_predicted, y_true))
         # the_f1_score = sklearn.metrics.f1_score(y_predicted, y_true)
         return the_f1_score
-
-    def shwo_visualization(self):
-        pass
