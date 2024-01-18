@@ -8,18 +8,19 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 class Hw2Classifier:
 
-    def __init__(self, models_weights: Tuple[float, float, float] =  (0.5, 0.2, 0.75)):
+    def __init__(self, models_weights: Tuple[float, float, float] = (0.001, 0.09, 0.9)):
         self._models_weights = np.asarray(models_weights)
 
         self._dt_model = DecisionTreeClassifier(
-            criterion="entropy",
+            criterion="gini",
             splitter="best",
-            max_depth=5,
+            max_depth=9,
             min_samples_split=2,
+            random_state=50
         )
 
-        self._lor_model = LogisticRegression(C=100, class_weight="balanced")
-        self._svm_model = SVC(C=100, class_weight="balanced", tol=0.01)
+        self._lor_model = LogisticRegression(penalty="l2", C=100, class_weight="balanced", max_iter=100)
+        self._svm_model = SVC(C=100, class_weight="balanced", tol=0.3)
 
     def fit(self, X, y):
         self._dt_model.fit(X, y)
